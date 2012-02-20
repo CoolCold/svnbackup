@@ -1,0 +1,129 @@
+
+        svnbackup scripts collection README
+
+    svnbackup scripts is collection of bash script for doing versioned 
+( revisioned ) backups of configuration files based on subversion VCS.
+
+Contents:
+0. The Idea
+1. Description
+2. Usage
+
+
+0. The Idea
+
+    The idea is to get versioned configuration files with opportunity
+to view changes ( diffs ) of that files. Versioning is achieved by saving
+files into subversion VCS. So, it is possible can get content
+of file as it was in the very beginning of server's life.
+As additional feature, commit diffs can be sended with post-commit scripts
+for example as email messages and reviewed by admins' eyes :)
+
+WebSVN ( http://websvn.tigris.org/ ) and ViewSVN ( http://viewsvn.berlios.de/ )
+are recommended as webviewers.
+
+1. Description
+
+ svnbackup-backup.sh - client side script which does checkouts and commits
+ svnbackup-create_repo.sh - helper script for repository creation on server
+
+    The real work is done by svnbackup-backup script - it connects to svn
+server, which is served, for example, by svnserve, does checkout of current
+configuration into tmp dir, copyies local files into that dir and then,
+if there are any changes, does commit.
+
+Local data copy is done via rsync(1) which can be said to ignore some
+dirs and files.
+
+Connections to remote repository can be done with any type supported
+by subversion client. Default and the only tested scheme is svn://somehost/ .
+
+It is assumed that you have one or more servers to be backuped and on
+central server which acts as repositories holder for them.
+
+
+Messages about current work status & errors are sent to stdout and syslog
+via logger(1) . If there are no problems, there should be nothing on stdout,
+syslog only. Such mode is situable to be running from cron(8)
+
+2. Usage
+
+To make script do it's job there are several conditions to be met
+
+1) configured subversion repository for server to be backuped
+You can read about subversion repo configuration and administration on 
+http://svnbook.red-bean.com/en/1.5/svn.reposadmin.html . For your pleasure
+there is svnbackup-create_repo.sh script which should take care of creating
+repo, setting password and installing post-commit hook.
+
+
+2) proper config file
+
+There are several settings in config file which should be configured.
+Please note, that config file is just regular bash script, so any bash
+features can be used within it.
+
+svnbackup-backup.sh ( client ) settings:
+SERVER - should contain servername. This name is used as standalone repository.
+         it is ok to use some shell substitution like SERVER=`hostname`
+
+LOCKFILE - path to lockfile, used to prevent several script instances to run
+
+STATEFILE - path to file which will be updated after successful operation
+            this file contains data in such format:
+            TIMESTAMP TIMETAKEN
+            where TIMESTAMP is value produced by $(date +%s) and is seconds
+            since epoch, TIMETAKEN - time, in seconds, taken to complete
+            operation. As file is updated only on success, it
+            can be used by some monitoring agents, like Nagios.
+
+#remote svn repository related settings
+
+SVNUSER - who will has r/w access to repository, suggested value is "svnbackup"
+          this value has't be system user, but rather svnserve user, read more
+          on subversion docs
+SVNPATH - path used to connect to repo, like svn://remote.server.com
+
+SVNREPOTMP - where temporary checkouted copy should live on client
+
+include_dir - sets one or more paths to be backuped, can be used like:
+include_dir=/etc
+include_dir=/var/lib/dpkg
+include_dir=/root/bin
+
+
+svnbackup-create_repo.sh wanna read these extra settings from config:
+
+REPOOWNED - user:group string represents owner and group for repository.
+            this is useful if your svnserve is being runned under dedicated
+            account. Format is in chown(1) style.
+            It's not bad to use "svnbackup:svnbackup" as user:owner.
+
+REPOSPATH - path to hold all repositories, end slash matters. 
+            Repo for particular server will be located under this path, i.e.
+            if REPOSPATH=/var/lib/svnbackup , then repo for server server1.com
+            will be stored in /var/lib/svnbackup/server1.com
+
+INSTALLPCHOOK - should we install post-commit hook template? Set to "YES" if
+                you want enable this feature. Simple sh based hook template is
+                included, you may wish to change default address for emails.
+
+PCHOOK_TMPL - path to post-commit hook template. On debian based system it 
+              should be located in /usr/share/svnbackup/templates/post-commit.tmpl
+
+3) command line switches
+
+svnbackup-backup.sh accepts these command line options:
+-c     path to config file
+-I     should be used for first run, to make subversion client save password and such
+-h     shows help
+
+svnbackup-create_repo.sh
+-c     path to config file
+-H     hostname we should create repository for
+-h     shows help
+
+
+Also there is gonna be debian init script to start svnserve and accordinal
+configuration files.
+

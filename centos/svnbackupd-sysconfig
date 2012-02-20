@@ -1,0 +1,16 @@
+# Defaults for svnbackupd initscript
+# sourced by /etc/init.d/svnbackupd
+# installed at /etc/default/svnbackupd by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# Additional options that are passed to the Daemon.
+# this is really svnserve arguments, see svnserve(8) for more info
+OPTIONS="--listen-host=192.168.4.11 --listen-port=3690 -r /u01/oradata/backup/svnbackup/ -d"
+PIDFILE=/var/run/svnbackupd.pid
+DUSER=svnbackup
+
+#set RUN to "yes" to enable autostart
+RUN="no"

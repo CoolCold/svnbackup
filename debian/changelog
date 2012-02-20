@@ -1,0 +1,49 @@
+svnbackup (0.2.1-1) unstable; urgency=low
+
+  * updating from upstream, xaxaxaxa, handling of ~ status fixed
+
+ --  <coolcold@coolcold>  Tue, 15 Mar 2011 18:27:20 +0300
+
+svnbackup (0.2-5) unstable; urgency=low
+
+  * check_svnbackup.sh contrib script updated
+
+ --  <builder@builder-lenny-i386.local>  Wed, 09 Mar 2011 15:19:27 +0300
+
+svnbackup (0.2-4) unstable; urgency=low
+
+  * including nagios check script in contrib
+
+ --  <builder@builder.local>  Fri, 28 Jan 2011 15:21:47 +0000
+
+svnbackup (0.2-3) unstable; urgency=low
+
+  * fixing some errors lintian complains on
+
+ --  <coolcold@coolcold.local>  Mon, 04 Oct 2010 03:53:03 +0400
+
+svnbackup (0.2-2) unstable; urgency=low
+
+  * fixing url
+
+ --  <coolcold@coolcold.local>  Mon, 04 Oct 2010 03:39:02 +0400
+
+svnbackup (0.2-1) unstable; urgency=low
+
+  * new upstream (hehe) release
+    added support for state saving, view README
+
+ --  <coolcold@coolcold.local>  Mon, 04 Oct 2010 03:17:13 +0400
+
+svnbackup (0.1-2) unstable; urgency=low
+
+  * adding subversion-tools to Suggests
+
+ --  <coolcold@coolcold.local>  Thu, 30 Sep 2010 00:20:23 +0400
+
+svnbackup (0.1-1) unstable; urgency=low
+
+  * Initial release for debian
+
+ -- Roman Ovchinnikov <coolthecold@gmail.com>  Sun, 12 Sep 2010 23:01:12 +0400
+

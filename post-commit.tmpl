@@ -1,0 +1,8 @@
+#!/bin/sh
+
+REPOS="$1"
+REV="$2"
+BHOST="BHOST_TEMPLATE"
+
+/usr/share/subversion/hook-scripts/commit-email.pl $REPOS $REV -s "[svnbackup on $BHOST]" --summary --diff y root
+

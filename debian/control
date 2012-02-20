@@ -1,0 +1,17 @@
+Source: svnbackup
+Section: utils
+Priority: extra
+Maintainer: Roman Ovchinnikov <coolthecold@gmail.com>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.7.3
+Homepage: http://svn.coolcold.org/websvn/listing.php?repname=common&path=%2Fscripts%2Fsvnbackup%2F#_scripts_svnbackup_
+
+Package: svnbackup
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, bash (>= 3.2), rsync, subversion, util-linux (>= 2.13.1.1), adduser (>= 3.11)
+Suggests: subversion-tools
+Description: scripts set to make an automated commit of configurations
+ scripts set to make an automated commit of /etc and/or other 
+ configuration directories into subversion repository so allowing
+ to keep history of changes
+

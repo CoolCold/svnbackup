@@ -1,0 +1,25 @@
+Notes on using svnbackup scripts on Debian
+
+
+Daemon
+
+By default svnserve daemon is not enabled, you will need
+to edit /etc/default/svnbackupd and set RUN variable to "yes" .
+
+Also, by default daemon will listen on 127.0.0.1 . That is safe default value,
+but almost not situable for production usage, so you'll need to change it to
+allow remote clients connection.
+
+Default email address in post-commit hook template is set to "root", you may
+wish to change this in /usr/share/svnbackup/templates/post-commit.tmpl .
+If you are planning to use post-commit hooks, you may need
+to install package subversion-tools .
+
+
+
+Client
+
+Nothing really special.
+
+
+ -- Roman Ovchinnikov <coolthecold@gmail.com>  Wed, Sep 29 21:47:53 MSD 2010

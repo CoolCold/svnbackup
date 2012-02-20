@@ -1,0 +1,4 @@
+etc
+usr/bin
+usr/share/svnbackup/templates
+var/spool/svnbackup
