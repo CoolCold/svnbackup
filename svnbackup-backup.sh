@@ -50,8 +50,9 @@ function myexit() {
 }
 
 print_usage() {
-    echo "Usage: $PROGNAME -c <config file path> [-I]"
+    echo "Usage: $PROGNAME [-c <config file path>] [-I]"
     echo ""
+    echo "-c     contains path to config file. default file is $CONFFILE"
     echo "-I     should be used for first run, to make subversion client save password and such"
     echo "       use -h to show this help"
 }
@@ -68,12 +69,12 @@ print_help() {
 
 mylog "starting svnbackup script version: $MYVERSION"
 
-if [[ $# -eq "0"  ]]; then
-    #no arguments were specified...very, very bad
-    print_help
-    mylog -e "no configuration file was specified, please read help on usage"
-    exit 1
-fi
+#if [[ $# -eq "0"  ]]; then
+#    #no arguments were specified...very, very bad
+#    print_help
+#    mylog -e "no configuration file was specified, please read help on usage"
+#    exit 1
+#fi
 
 
 # parsing arguments
@@ -186,6 +187,20 @@ function preparelc() {
     chown root:root ${svncopy}
 }
 
+#do repo & config init on localhost
+function dolocalinit() {
+    rm -rf ${svncopy}
+    if ! mkdir -m 700 -p ${svncopy};then mylog -e "problem while creating directory ${svncopy}";return 2;fi
+    mylog "doing checkout from repository $SVNPATH/$SERVER into ${svncopy} ..."
+    
+    if ! svn --username "${SVNUSER}" co $SVNPATH/$SERVER ${svncopy};then
+        mylog -e "checkout failed"
+        return 2
+    fi
+    chmod 700 ${svncopy}
+    chown root:root ${svncopy}
+}
+
 function synclc() {
 #this function should sync local data onto checkouted ones
 #this we'll do svn commit
@@ -270,6 +285,19 @@ function updatestatus() {
     echo "$TS_END $TS_DIFF" > ${STATEFILE}
 }
 
+#checking - are we in init mode?
+if [ $INITSVN = "YES" ];then
+    dolocalinit
+    localinit_res=$?
+    if [ $localinit_res -ne 0 ];then
+        mylog -e "init mode failed, may be this is caused by non-existent repository on remote side"
+        mylog -e "read error message and refer to manual pages"
+        myexit $localinit_res
+    else
+        mylog -e "init mode succeeded, you may continue in regular mode now"
+        myexit 0
+    fi
+fi
 #doing checkout from repo
 preparelc_out=$(preparelc 2>&1)
 preparelc_res=$?
