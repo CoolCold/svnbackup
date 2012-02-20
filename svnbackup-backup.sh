@@ -5,7 +5,7 @@
 
 # $Id: svnbackup-backup.sh 104 2011-03-15 15:28:30Z coolcold $
 MYREVISION='$Id: svnbackup-backup.sh 104 2011-03-15 15:28:30Z coolcold $'
-MYVERSION="0.2.1 , revision: ${MYREVISION}"
+MYVERSION="0.2.2 , revision: ${MYREVISION}"
 PROGNAME=$(basename $0)
 
 #walking around sudo/su variables & subversion configs

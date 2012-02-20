@@ -1,3 +1,11 @@
+svnbackup (0.2.2-1) unstable; urgency=low
+
+  * updating from upstrem (:
+  * fixed problem when svn asks more question on squeeze
+  * default config path is used now
+
+ --  <coolcold@coolcold>  Tue, 21 Feb 2012 00:39:58 +0400
+
 svnbackup (0.2.1-1) unstable; urgency=low
 
   * updating from upstream, xaxaxaxa, handling of ~ status fixed
